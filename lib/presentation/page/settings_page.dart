@@ -14,7 +14,7 @@ class SettingsPage extends ConsumerWidget {
 
     return SettingsList(
         lightTheme: SettingsThemeData(
-            settingsListBackground: Theme.of(context).colorScheme.background),
+            settingsListBackground: Theme.of(context).colorScheme.surface),
         sections: [
           SettingsSection(
             title: const Text('Transaction'),

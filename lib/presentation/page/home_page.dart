@@ -74,13 +74,13 @@ class HomePage extends ConsumerWidget {
                             Expanded(
                                 child: Text(
                               'Account Name',
-                              style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+                              style: TextStyle(color: Theme.of(context).colorScheme.surface),
                             )),
                             Expanded(
                                 child: Text(
                               'Balance',
                               textAlign: TextAlign.right,
-                              style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+                              style: TextStyle(color: Theme.of(context).colorScheme.surface),
                             )),
                           ],
                         ),
@@ -118,13 +118,13 @@ class HomePage extends ConsumerWidget {
                             Expanded(
                                 child: Text(
                               'Total Balance',
-                              style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+                              style: TextStyle(color: Theme.of(context).colorScheme.surface),
                             )),
                             Expanded(
                                 child: Text(
                               currencyFormat(totalAccountBalance.toString()),
                               textAlign: TextAlign.right,
-                              style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+                              style: TextStyle(color: Theme.of(context).colorScheme.surface),
                             )),
                           ],
                         ),

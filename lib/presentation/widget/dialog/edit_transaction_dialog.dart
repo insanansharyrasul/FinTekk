@@ -60,7 +60,7 @@ class EditTransactionDialogState extends ConsumerState<EditTransactionDialog> {
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.close),
-            color: Theme.of(context).dialogBackgroundColor,
+            color: Theme.of(context).colorScheme.surface,
           ),
         ),
         body: SingleChildScrollView(
@@ -177,7 +177,7 @@ class EditTransactionDialogState extends ConsumerState<EditTransactionDialog> {
                   alignment: Alignment.centerRight,
                   child: OutlinedButton(
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
+                      shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                       ),
                     ),

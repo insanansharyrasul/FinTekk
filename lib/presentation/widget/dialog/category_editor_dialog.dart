@@ -110,7 +110,7 @@ class EditCategoryDialogState extends ConsumerState<EditCategoryDialog> {
                     ref.read(transactionCategoryProvider.notifier).updateTransactionCategory(
                           transactionCategoryId: widget.category.id!,
                           newName: newCategoryNameController.text,
-                          newColor: newColor.value,
+                          newColor: newColor.toARGB32(),
                         );
                     pushGlobalSnackbar(message: 'Category successfully edited');
                     Navigator.pop(context);
@@ -184,7 +184,7 @@ class AddCategoryDialogState extends ConsumerState<AddCategoryDialog> {
                         barrierDismissible: false,
                         builder: (BuildContext context) => AddCategoryConfirmationDialog(
                               name: categoryNameController.value.text,
-                              color: colorPick.value,
+                              color: colorPick.toARGB32(),
                             ));
                   },
             child: const Text('Add')),

@@ -109,11 +109,11 @@ class ReportPageState extends ConsumerState<ReportPage> {
                   },
                   showSelectedIcon: false,
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
+                    shape: WidgetStateProperty.all(
                       const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                     ),
                     visualDensity: const VisualDensity(horizontal: -3, vertical: -3),
-                    iconSize: MaterialStateProperty.all(0),
+                    iconSize: WidgetStateProperty.all(0),
                   ),
                 ),
               ),

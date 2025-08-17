@@ -17,13 +17,13 @@ class AccountListTile extends ConsumerWidget {
           Expanded(
               child: Text(
             account.name ?? 'Null',
-            style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.surface),
           )),
           Expanded(
               child: Text(
             currencyFormat(balance.toString()),
             textAlign: TextAlign.right,
-            style: TextStyle(color: Theme.of(context).dialogBackgroundColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.surface),
           )),
         ],
       ),
