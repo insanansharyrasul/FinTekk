@@ -33,7 +33,7 @@ class ReportPageState extends ConsumerState<ReportPage> {
     ReportByMonth reportByMonth = ref.watch(reportByMonthProvider);
 
     List<TranscactionCategory> transactionCategories =
-        ref.watch(transactionCategoryProvider).value!;
+        ref.watch(transactionCategoryProvider).value ?? [];
 
     return ref.watch(transactionProvider).value!.isEmpty
         ? const Center(

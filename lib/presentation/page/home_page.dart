@@ -142,16 +142,18 @@ class HomePage extends ConsumerWidget {
             children: [
               const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 13), child: Text('Transactions')),
-              transactions.value!.isNotEmpty
-                  ? TextButton(
-                      onPressed: () {
-                        ref
-                            .read(localTransactionTilesShowOptionsState.notifier)
-                            .update((state) => !state);
-                      },
-                      child: Text(
-                          transactionTilesIsShowingOption ? 'Hide Options' : 'Show Options'),
-                    )
+              transactions.value != null
+                  ? (transactions.value!.isNotEmpty
+                      ? TextButton(
+                          onPressed: () {
+                            ref
+                                .read(localTransactionTilesShowOptionsState.notifier)
+                                .update((state) => !state);
+                          },
+                          child: Text(
+                              transactionTilesIsShowingOption ? 'Hide Options' : 'Show Options'),
+                        )
+                      : Container())
                   : Container()
             ],
           ),
@@ -186,9 +188,7 @@ class HomePage extends ConsumerWidget {
                             text: TextSpan(
                               text: DateFormat('d MMM y ').format(item),
                               style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16),
+                                  color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                               children: [
                                 TextSpan(
                                   text: ' (${currencyFormat(dailySummary.toString())})',
