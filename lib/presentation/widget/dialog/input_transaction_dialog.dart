@@ -30,7 +30,7 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog> 
   @override
   Widget build(BuildContext context) {
     List<TranscactionCategory> transactionCategories =
-        ref.watch(transactionCategoryProvider).value!;
+        ref.watch(transactionCategoryProvider).value?? [];
     List<Account> accounts = ref.watch(accountProvider).value!;
     String transactionCategoryId = ref.watch(localCachedTransactionCategoryIdProvider);
     String accountId = ref.watch(localCachedAccountIdProvider);

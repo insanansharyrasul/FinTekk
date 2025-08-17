@@ -152,17 +152,21 @@ class ReportPageState extends ConsumerState<ReportPage> {
                                                       String category = categoryBalanceMap.keys
                                                           .toList()[index];
                                                       double value =
-                                                          categoryBalanceMap[category]!
-                                                              .toDouble();
+                                                          categoryBalanceMap[category]!.toDouble();
                                                       return PieChartSectionData(
                                                           title: category,
                                                           value: value,
                                                           radius: 50,
-                                                          color: Color(transactionCategories
-                                                              .where(
-                                                                  (e) => e.name! == category)
-                                                              .first
-                                                              .color!),
+                                                          color: Color(
+                                                            (transactionCategories.firstWhere(
+                                                              (e) => e.name == category,
+                                                              orElse: () => TranscactionCategory(
+                                                                  color: 0,
+                                                                  id: '',
+                                                                  name: 'Unknown'
+                                                                ), // or your default
+                                                            ).color)!,
+                                                          ),
                                                           titleStyle: const TextStyle(
                                                               fontSize: 9,
                                                               fontWeight: FontWeight.bold,

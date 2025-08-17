@@ -12,7 +12,7 @@ class CategoryEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<TranscactionCategory> transactionCategories =
-        ref.watch(transactionCategoryProvider).value!;
+        ref.watch(transactionCategoryProvider).value?? [];
     return AlertDialog(
       title: const Text('Category Editor', style: TextStyle(fontSize: 20)),
       contentPadding: const EdgeInsets.fromLTRB(8, 12, 0, 12),
