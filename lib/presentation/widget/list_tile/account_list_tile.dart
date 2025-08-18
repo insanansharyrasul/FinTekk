@@ -13,7 +13,6 @@ class AccountListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isPositiveBalance = balance >= 0;
-    final balanceColor = isPositiveBalance ? ColorConst.incomeGreen : ColorConst.expenseRed;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -25,10 +24,10 @@ class AccountListTile extends ConsumerWidget {
         vertical: UIConst.spacingS,
       ),
       decoration: BoxDecoration(
-        color: ColorConst.textOnPrimary.withOpacity(0.05),
+        color: ColorConst.textOnPrimary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(UIConst.radiusM),
         border: Border.all(
-          color: ColorConst.textOnPrimary.withOpacity(0.1),
+          color: ColorConst.textOnPrimary.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -38,7 +37,7 @@ class AccountListTile extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(UIConst.spacingS),
             decoration: BoxDecoration(
-              color: ColorConst.textOnPrimary.withOpacity(0.15),
+              color: ColorConst.textOnPrimary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(UIConst.radiusS),
             ),
             child: const Icon(
@@ -65,7 +64,7 @@ class AccountListTile extends ConsumerWidget {
                 Text(
                   'Account Balance',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: ColorConst.textOnPrimary.withOpacity(0.7),
+                    color: ColorConst.textOnPrimary.withValues(alpha: 0.7),
                     fontSize: 11,
                   ),
                 ),
@@ -92,7 +91,7 @@ class AccountListTile extends ConsumerWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: ColorConst.expenseRed.withOpacity(0.2),
+                    color: ColorConst.expenseRed.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(UIConst.radiusS),
                   ),
                   child: Text(

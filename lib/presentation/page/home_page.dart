@@ -42,14 +42,19 @@ class HomePage extends ConsumerWidget {
           end: Alignment.bottomCenter,
           colors: [
             ColorConst.surfaceLight,
-            ColorConst.surfaceLight.withOpacity(0.8),
+            ColorConst.surfaceLight.withValues(alpha: 0.8),
           ],
         ),
       ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(UIConst.spacingM),
+          padding: const EdgeInsets.fromLTRB(
+            UIConst.spacingM,
+            UIConst.spacingM,
+            UIConst.spacingM,
+            UIConst.spacingXL, // Extra bottom padding for navigation bar
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -96,7 +101,7 @@ class HomePage extends ConsumerWidget {
         borderRadius: BorderRadius.circular(UIConst.radiusL),
         boxShadow: [
           BoxShadow(
-            color: ColorConst.primaryGreen.withOpacity(0.3),
+            color: ColorConst.primaryGreen.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -114,7 +119,7 @@ class HomePage extends ConsumerWidget {
                     Text(
                       'Total Balance',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: ColorConst.textOnPrimary.withOpacity(0.9),
+                        color: ColorConst.textOnPrimary.withValues(alpha: 0.9),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -133,7 +138,7 @@ class HomePage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(UIConst.spacingM),
                 decoration: BoxDecoration(
-                  color: ColorConst.textOnPrimary.withOpacity(0.2),
+                  color: ColorConst.textOnPrimary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(UIConst.radiusL),
                 ),
                 child: Icon(
@@ -151,7 +156,7 @@ class HomePage extends ConsumerWidget {
               vertical: UIConst.spacingS,
             ),
             decoration: BoxDecoration(
-              color: ColorConst.textOnPrimary.withOpacity(0.15),
+              color: ColorConst.textOnPrimary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(UIConst.radiusM),
             ),
             child: Row(
@@ -165,7 +170,7 @@ class HomePage extends ConsumerWidget {
                 Text(
                   'Combined balance from all accounts',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: ColorConst.textOnPrimary.withOpacity(0.9),
+                    color: ColorConst.textOnPrimary.withValues(alpha: 0.9),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -213,7 +218,7 @@ class HomePage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(UIConst.spacingS),
                 decoration: BoxDecoration(
-                  color: ColorConst.textOnPrimary.withOpacity(0.2),
+                  color: ColorConst.textOnPrimary.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(UIConst.radiusS),
                 ),
                 child: const Icon(
@@ -237,7 +242,7 @@ class HomePage extends ConsumerWidget {
                     Text(
                       '${accounts?.length ?? 0} account${(accounts?.length ?? 0) != 1 ? 's' : ''}',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: ColorConst.textOnPrimary.withOpacity(0.8),
+                        color: ColorConst.textOnPrimary.withValues(alpha: 0.8),
                       ),
                     ),
                   ],
@@ -264,7 +269,7 @@ class HomePage extends ConsumerWidget {
                           child: Text(
                             'Account Name',
                             style: theme.textTheme.labelLarge?.copyWith(
-                              color: ColorConst.textOnPrimary.withOpacity(0.9),
+                              color: ColorConst.textOnPrimary.withValues(alpha: 0.9),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -272,7 +277,7 @@ class HomePage extends ConsumerWidget {
                         Text(
                           'Balance',
                           style: theme.textTheme.labelLarge?.copyWith(
-                            color: ColorConst.textOnPrimary.withOpacity(0.9),
+                            color: ColorConst.textOnPrimary.withValues(alpha: 0.9),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -281,7 +286,7 @@ class HomePage extends ConsumerWidget {
                   ),
 
                   Divider(
-                    color: ColorConst.textOnPrimary.withOpacity(0.2),
+                    color: ColorConst.textOnPrimary.withValues(alpha: 0.2),
                     thickness: 1,
                   ),
 
@@ -341,8 +346,9 @@ class HomePage extends ConsumerWidget {
         if (transactions.value != null && transactions.value!.isNotEmpty)
           Container(
             decoration: BoxDecoration(
-              color:
-                  isShowingOptions ? ColorConst.primaryGreen.withOpacity(0.1) : Colors.transparent,
+              color: isShowingOptions
+                  ? ColorConst.primaryGreen.withValues(alpha: 0.1)
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(UIConst.radiusM),
             ),
             child: TextButton.icon(
@@ -388,119 +394,108 @@ class HomePage extends ConsumerWidget {
           Map<DateTime, int> dailySummaries =
               ref.watch(transactionProvider.notifier).getDailyTotalSummary(transactionsList);
 
-          return Container(
-            constraints: const BoxConstraints(
-              maxHeight: 400,
+          return Card(
+            elevation: UIConst.elevationLow,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(UIConst.radiusL),
             ),
-            child: Card(
-              elevation: UIConst.elevationLow,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(UIConst.radiusL),
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(UIConst.spacingM),
-                child: Scrollbar(
-                  controller: scrollController,
-                  thumbVisibility: true,
-                  thickness: 4,
-                  radius: const Radius.circular(UIConst.radiusS),
-                  child: ListView.builder(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = items.elementAt(index);
-
-                      if (item is DateTime) {
-                        int dailySummary =
-                            dailySummaries[DateTime(item.year, item.month, item.day)] ?? 0;
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: UIConst.spacingS,
-                            horizontal: UIConst.spacingS,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: UIConst.spacingM,
-                            vertical: UIConst.spacingS,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                ColorConst.primaryGreen.withOpacity(0.1),
-                                ColorConst.primaryGreen.withOpacity(0.05),
-                              ],
+            child: Container(
+              padding: const EdgeInsets.all(UIConst.spacingM),
+              child: ListView.builder(
+                controller: scrollController,
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = items.elementAt(index);
+                        
+                  if (item is DateTime) {
+                    int dailySummary =
+                        dailySummaries[DateTime(item.year, item.month, item.day)] ?? 0;
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: UIConst.spacingS,
+                        horizontal: UIConst.spacingS,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UIConst.spacingS,
+                        vertical: UIConst.spacingS,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            ColorConst.primaryGreen.withValues(alpha: 0.1),
+                            ColorConst.primaryGreen.withValues(alpha: 0.05),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(UIConst.radiusM),
+                        border: Border.all(
+                          color: ColorConst.primaryGreen.withValues(alpha: 0.2),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(UIConst.spacingS),
+                            decoration: BoxDecoration(
+                              color: ColorConst.primaryGreen.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(UIConst.radiusS),
                             ),
-                            borderRadius: BorderRadius.circular(UIConst.radiusM),
-                            border: Border.all(
-                              color: ColorConst.primaryGreen.withOpacity(0.2),
+                            child: const Icon(
+                              Icons.calendar_today_rounded,
+                              color: ColorConst.primaryGreen,
+                              size: 16,
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(UIConst.spacingS),
-                                decoration: BoxDecoration(
-                                  color: ColorConst.primaryGreen.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(UIConst.radiusS),
-                                ),
-                                child: const Icon(
-                                  Icons.calendar_today_rounded,
-                                  color: ColorConst.primaryGreen,
-                                  size: 16,
-                                ),
+                          const SizedBox(width: UIConst.spacingM),
+                          Expanded(
+                            child: Text(
+                              DateFormat('EEEE, d MMM y').format(item),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                color: ColorConst.textPrimary,
+                                fontWeight: FontWeight.w600,
                               ),
-                              const SizedBox(width: UIConst.spacingM),
-                              Expanded(
-                                child: Text(
-                                  DateFormat('EEEE, d MMM y').format(item),
-                                  style: theme.textTheme.titleMedium?.copyWith(
-                                    color: ColorConst.textPrimary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: UIConst.spacingM,
-                                  vertical: UIConst.spacingS,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: dailySummary >= 0
-                                      ? ColorConst.incomeGreen.withOpacity(0.1)
-                                      : ColorConst.expenseRed.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(UIConst.radiusS),
-                                ),
-                                child: Text(
-                                  currencyFormat(dailySummary.toString()),
-                                  style: theme.textTheme.labelLarge?.copyWith(
-                                    color: dailySummary >= 0
-                                        ? ColorConst.incomeGreen
-                                        : ColorConst.expenseRed,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        );
-                      } else if (item is InternalTransfer) {
-                        return InternalTransferListTile(
-                          internalTransfer: item,
-                          isShowingOption: isShowingOptions,
-                        );
-                      } else if (item is Transactionn) {
-                        return TransactionListTile(
-                          transaction: item,
-                          isShowingOption: isShowingOptions,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: UIConst.spacingM,
+                              vertical: UIConst.spacingS,
+                            ),
+                            decoration: BoxDecoration(
+                              color: dailySummary >= 0
+                                  ? ColorConst.incomeGreen.withValues(alpha: 0.1)
+                                  : ColorConst.expenseRed.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(UIConst.radiusS),
+                            ),
+                            child: Text(
+                              currencyFormat(dailySummary.toString()),
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: dailySummary >= 0
+                                    ? ColorConst.incomeGreen
+                                    : ColorConst.expenseRed,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (item is InternalTransfer) {
+                    return InternalTransferListTile(
+                      internalTransfer: item,
+                      isShowingOption: isShowingOptions,
+                    );
+                  } else if (item is Transactionn) {
+                    return TransactionListTile(
+                      transaction: item,
+                      isShowingOption: isShowingOptions,
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
               ),
             ),
           );
@@ -526,7 +521,7 @@ class HomePage extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(UIConst.spacingL),
               decoration: BoxDecoration(
-                color: ColorConst.neutralGray.withOpacity(0.1),
+                color: ColorConst.neutralGray.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(

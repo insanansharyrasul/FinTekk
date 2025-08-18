@@ -46,7 +46,6 @@ class App extends ConsumerWidget {
           secondary: ColorConst.accentBlue,
           tertiary: ColorConst.accentOrange,
           surface: ColorConst.surfaceLight,
-          background: ColorConst.surfaceLight,
         ),
         useMaterial3: true,
 
@@ -62,14 +61,14 @@ class App extends ConsumerWidget {
           foregroundColor: ColorConst.textOnPrimary,
           surfaceTintColor: Colors.transparent,
           elevation: UIConst.elevationMedium,
-          shadowColor: ColorConst.primaryGreenDark.withOpacity(0.3),
+          shadowColor: ColorConst.primaryGreenDark.withValues(alpha: 0.3),
           centerTitle: true,
         ),
 
         // Enhanced Card theme
         cardTheme: CardThemeData(
           elevation: UIConst.elevationLow,
-          shadowColor: ColorConst.neutralGray.withOpacity(0.3),
+          shadowColor: ColorConst.neutralGray.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(UIConst.radiusM),
           ),
@@ -183,8 +182,8 @@ class App extends ConsumerWidget {
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: ColorConst.cardBackground,
           elevation: UIConst.elevationMedium,
-          shadowColor: ColorConst.neutralGray.withOpacity(0.2),
-          indicatorColor: ColorConst.primaryGreen.withOpacity(0.1),
+          shadowColor: ColorConst.neutralGray.withValues(alpha: 0.2),
+          indicatorColor: ColorConst.primaryGreen.withValues(alpha: 0.1),
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return const TextStyle(
@@ -223,7 +222,7 @@ class App extends ConsumerWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(UIConst.radiusM),
-            borderSide: BorderSide(color: ColorConst.neutralGray.withOpacity(0.5)),
+            borderSide: BorderSide(color: ColorConst.neutralGray.withValues(alpha: 0.5)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(UIConst.radiusM),

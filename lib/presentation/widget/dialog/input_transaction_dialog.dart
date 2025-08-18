@@ -10,10 +10,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final localCachedTransactionCategoryIdProvider =
-    StateProvider<String>((ref) => ref.read(transactionCategoryProvider).value![0].id!);
-final localCachedAccountIdProvider =
-    StateProvider<String>((ref) => ref.read(accountProvider).value![0].id!);
+final localCachedTransactionCategoryIdProvider = StateProvider<String>((ref) {
+  final categories = ref.read(transactionCategoryProvider).value;
+  return (categories != null && categories.isNotEmpty) ? categories[0].id! : '';
+});
+final localCachedAccountIdProvider = StateProvider<String>((ref) {
+  final accounts = ref.read(accountProvider).value;
+  return (accounts != null && accounts.isNotEmpty) ? accounts[0].id! : '';
+});
 final localTransactionTypeProvider = StateProvider<String>((ref) => TransactionConst.income);
 final localAmountFormattedPreviewProvider = StateProvider<String>((ref) => '0');
 
@@ -30,153 +34,153 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
   final TextEditingController descriptionTextController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  late AnimationController _animationController;
-  late Animation<double> _slideAnimation;
-  late Animation<double> _fadeAnimation;
-
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _slideAnimation = Tween<double>(
-      begin: 0.3,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     List<TranscactionCategory> transactionCategories =
         ref.watch(transactionCategoryProvider).value ?? [];
-    List<Account> accounts = ref.watch(accountProvider).value!;
+    List<Account> accounts = ref.watch(accountProvider).value ?? [];
     String transactionCategoryId = ref.watch(localCachedTransactionCategoryIdProvider);
     String accountId = ref.watch(localCachedAccountIdProvider);
     String type = ref.watch(localTransactionTypeProvider);
 
+    if (transactionCategoryId.isEmpty && transactionCategories.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(localCachedTransactionCategoryIdProvider.notifier).state =
+            transactionCategories[0].id!;
+      });
+      transactionCategoryId = transactionCategories[0].id!;
+    }
+
+    if (accountId.isEmpty && accounts.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(localCachedAccountIdProvider.notifier).state = accounts[0].id!;
+      });
+      accountId = accounts[0].id!;
+    }
+
+    if (accounts.isEmpty || transactionCategories.isEmpty) {
+      return Dialog.fullscreen(
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Add Transaction'),
+            backgroundColor: ColorConst.primaryGreen,
+            foregroundColor: ColorConst.textOnPrimary,
+            leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.close_rounded),
+            ),
+          ),
+          body: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Loading accounts and categories...'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
 
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: _slideAnimation.value,
-          child: Opacity(
-            opacity: _fadeAnimation.value,
-            child: Dialog.fullscreen(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      ColorConst.gradientStart.withOpacity(0.05),
-                      ColorConst.gradientEnd.withOpacity(0.02),
-                    ],
-                  ),
+    return Dialog.fullscreen(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              ColorConst.gradientStart.withValues(alpha: 0.05),
+              ColorConst.gradientEnd.withValues(alpha: 0.02),
+            ],
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            title: Text(
+              'Add Transaction',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                color: ColorConst.textOnPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            backgroundColor: ColorConst.primaryGreen,
+            foregroundColor: ColorConst.textOnPrimary,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+              onPressed: () {
+                // _animationController.reverse().then((_) {
+                Navigator.of(context).pop();
+                // });
+              },
+              icon: const Icon(Icons.close_rounded, size: 28),
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.white.withValues(alpha: 0.1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(UIConst.radiusS),
                 ),
-                child: Scaffold(
-                  backgroundColor: Colors.transparent,
-                  extendBodyBehindAppBar: true,
-                  appBar: AppBar(
-                    title: Text(
-                      'Add Transaction',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        color: ColorConst.textOnPrimary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    backgroundColor: ColorConst.primaryGreen,
-                    foregroundColor: ColorConst.textOnPrimary,
-                    elevation: 0,
-                    automaticallyImplyLeading: false,
-                    leading: IconButton(
-                      onPressed: () {
-                        _animationController.reverse().then((_) {
-                          Navigator.of(context).pop();
-                        });
-                      },
-                      icon: const Icon(Icons.close_rounded, size: 28),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(UIConst.radiusS),
-                        ),
-                      ),
-                    ),
-                    actions: [
-                      Container(
-                        margin: const EdgeInsets.only(right: UIConst.spacingM),
-                        child: Icon(
-                          type == TransactionConst.income
-                              ? Icons.trending_up_rounded
-                              : Icons.trending_down_rounded,
-                          color: ColorConst.textOnPrimary,
-                          size: 28,
-                        ),
-                      ),
+              ),
+            ),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: UIConst.spacingM),
+                child: Icon(
+                  type == TransactionConst.income
+                      ? Icons.trending_up_rounded
+                      : Icons.trending_down_rounded,
+                  color: ColorConst.textOnPrimary,
+                  size: 28,
+                ),
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(UIConst.spacingL),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Amount Preview Card
+                      _buildAmountPreviewCard(type, theme),
+
+                      const SizedBox(height: UIConst.spacingXL),
+
+                      // Transaction Type Selector
+                      _buildTransactionTypeSelector(type, theme),
+
+                      const SizedBox(height: UIConst.spacingL),
+
+                      // Form Fields Card
+                      _buildFormFieldsCard(
+                          accounts, transactionCategories, accountId, transactionCategoryId, theme),
+
+                      const SizedBox(height: UIConst.spacingXL),
+
+                      // Action Buttons
+                      _buildActionButtons(type, transactionCategoryId, accountId, theme),
                     ],
-                  ),
-                  body: SafeArea(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(UIConst.spacingL),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              // Amount Preview Card
-                              _buildAmountPreviewCard(type, theme),
-
-                              const SizedBox(height: UIConst.spacingXL),
-
-                              // Transaction Type Selector
-                              _buildTransactionTypeSelector(type, theme),
-
-                              const SizedBox(height: UIConst.spacingL),
-
-                              // Form Fields Card
-                              _buildFormFieldsCard(accounts, transactionCategories, accountId,
-                                  transactionCategoryId, theme),
-
-                              const SizedBox(height: UIConst.spacingXL),
-
-                              // Action Buttons
-                              _buildActionButtons(type, transactionCategoryId, accountId, theme),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -195,12 +199,12 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
             end: Alignment.bottomRight,
             colors: type == TransactionConst.income
                 ? [
-                    ColorConst.incomeGreen.withOpacity(0.1),
-                    ColorConst.incomeGreen.withOpacity(0.05),
+                    ColorConst.incomeGreen.withValues(alpha: 0.1),
+                    ColorConst.incomeGreen.withValues(alpha: 0.05),
                   ]
                 : [
-                    ColorConst.expenseRed.withOpacity(0.1),
-                    ColorConst.expenseRed.withOpacity(0.05),
+                    ColorConst.expenseRed.withValues(alpha: 0.1),
+                    ColorConst.expenseRed.withValues(alpha: 0.05),
                   ],
           ),
         ),
@@ -421,89 +425,78 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
 
             const SizedBox(height: UIConst.spacingL),
 
-            // Account and Category Row
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Account Selector
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Account',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: ColorConst.textSecondary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: UIConst.spacingS),
-                      DropdownButtonFormField<String>(
-                        initialValue: accountId,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.account_balance_wallet_outlined,
-                            color: ColorConst.primaryGreen,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: UIConst.spacingM,
-                            vertical: UIConst.spacingS,
-                          ),
-                        ),
-                        items: accounts.map((Account account) {
-                          return DropdownMenuItem<String>(
-                            value: account.id!,
-                            child: Text(account.name!),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          ref.read(localCachedAccountIdProvider.notifier).update((state) => value!);
-                        },
-                      ),
-                    ],
+                Text(
+                  'Account',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: ColorConst.textSecondary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-
-                const SizedBox(width: UIConst.spacingM),
-
-                // Category Selector
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Category',
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: ColorConst.textSecondary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: UIConst.spacingS),
-                      DropdownButtonFormField<String>(
-                        initialValue: transactionCategoryId,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.category_outlined,
-                            color: ColorConst.primaryGreen,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: UIConst.spacingM,
-                            vertical: UIConst.spacingS,
-                          ),
-                        ),
-                        items: transactionCategories.map((TranscactionCategory category) {
-                          return DropdownMenuItem<String>(
-                            value: category.id!,
-                            child: Text(category.name!),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          ref
-                              .read(localCachedTransactionCategoryIdProvider.notifier)
-                              .update((state) => value!);
-                        },
-                      ),
-                    ],
+                const SizedBox(height: UIConst.spacingS),
+                DropdownButtonFormField<String>(
+                  initialValue: accountId,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.account_balance_wallet_outlined,
+                      color: ColorConst.primaryGreen,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: UIConst.spacingM,
+                      vertical: UIConst.spacingS,
+                    ),
                   ),
+                  items: accounts.map((Account account) {
+                    return DropdownMenuItem<String>(
+                      value: account.id!,
+                      child: Text(account.name!),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    ref.read(localCachedAccountIdProvider.notifier).update((state) => value!);
+                  },
+                ),
+              ],
+            ),
+
+            const SizedBox(height: UIConst.spacingM),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Category',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: ColorConst.textSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: UIConst.spacingS),
+                DropdownButtonFormField<String>(
+                  initialValue: transactionCategoryId,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.category_outlined,
+                      color: ColorConst.primaryGreen,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: UIConst.spacingM,
+                      vertical: UIConst.spacingS,
+                    ),
+                  ),
+                  items: transactionCategories.map((TranscactionCategory category) {
+                    return DropdownMenuItem<String>(
+                      value: category.id!,
+                      child: Text(category.name!),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    ref
+                        .read(localCachedTransactionCategoryIdProvider.notifier)
+                        .update((state) => value!);
+                  },
                 ),
               ],
             ),
@@ -514,10 +507,10 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
             Container(
               padding: const EdgeInsets.all(UIConst.spacingM),
               decoration: BoxDecoration(
-                color: ColorConst.accentBlue.withOpacity(0.1),
+                color: ColorConst.accentBlue.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(UIConst.radiusM),
                 border: Border.all(
-                  color: ColorConst.accentBlue.withOpacity(0.2),
+                  color: ColorConst.accentBlue.withValues(alpha: 0.2),
                 ),
               ),
               child: Row(
@@ -550,7 +543,9 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
       String type, String transactionCategoryId, String accountId, ThemeData theme) {
     final isFormValid = amountTextController.text.isNotEmpty &&
         int.tryParse(amountTextController.text) != null &&
-        int.parse(amountTextController.text) > 0;
+        int.parse(amountTextController.text) > 0 &&
+        transactionCategoryId.isNotEmpty &&
+        accountId.isNotEmpty;
 
     return Row(
       children: [
@@ -558,9 +553,9 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
           flex: 2,
           child: OutlinedButton.icon(
             onPressed: () {
-              _animationController.reverse().then((_) {
-                Navigator.of(context).pop();
-              });
+              // _animationController.reverse().then((_) {
+              Navigator.of(context).pop();
+              // });
             },
             icon: const Icon(Icons.close_rounded),
             label: const Text('Cancel'),
@@ -595,9 +590,9 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
                         message:
                             '${type == TransactionConst.income ? "Income" : "Expense"} added successfully!',
                       );
-                      _animationController.reverse().then((_) {
-                        Navigator.pop(context);
-                      });
+                      // _animationController.reverse().then((_) {
+                      Navigator.pop(context);
+                      // });
                     }
                   }
                 : null,

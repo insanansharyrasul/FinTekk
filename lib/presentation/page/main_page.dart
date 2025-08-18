@@ -2,7 +2,6 @@ import 'package:fl_finance_mngt/core/constants.dart';
 import 'package:fl_finance_mngt/presentation/page/home_page.dart';
 import 'package:fl_finance_mngt/presentation/page/report_page.dart';
 import 'package:fl_finance_mngt/presentation/page/settings_page.dart';
-import 'package:fl_finance_mngt/presentation/widget/fab_item_title.dart';
 import 'package:fl_finance_mngt/service/dialog_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,7 +111,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
             Container(
               padding: const EdgeInsets.all(UIConst.spacingS),
               decoration: BoxDecoration(
-                color: ColorConst.textOnPrimary.withOpacity(0.2),
+                color: ColorConst.textOnPrimary.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(UIConst.radiusS),
               ),
               child: Icon(
@@ -136,7 +135,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
                   Text(
                     navigationItems[currentPageIndex].description,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: ColorConst.textOnPrimary.withOpacity(0.8),
+                      color: ColorConst.textOnPrimary.withValues(alpha: 0.8),
                       fontSize: 12,
                     ),
                   ),
@@ -163,14 +162,17 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
       ),
 
       // Enhanced Body with PageView
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        children: pages,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 70), // Add bottom padding for navigation bar
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          children: pages,
+        ),
       ),
 
       // Enhanced FAB
@@ -184,7 +186,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
                   child: ExpandableFab(
                     key: GlobalKey<ExpandableFabState>(),
                     overlayStyle: ExpandableFabOverlayStyle(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.6),
                       blur: 4,
                     ),
                     type: ExpandableFabType.up,
@@ -209,7 +211,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
                             borderRadius: BorderRadius.circular(32),
                             boxShadow: [
                               BoxShadow(
-                                color: ColorConst.primaryGreen.withOpacity(0.4),
+                                color: ColorConst.primaryGreen.withValues(alpha: 0.4),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),
@@ -242,13 +244,13 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
                               end: Alignment.bottomRight,
                               colors: [
                                 ColorConst.expenseRed,
-                                ColorConst.expenseRed.withOpacity(0.8),
+                                ColorConst.expenseRed.withValues(alpha: 0.8),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(32),
                             boxShadow: [
                               BoxShadow(
-                                color: ColorConst.expenseRed.withOpacity(0.4),
+                                color: ColorConst.expenseRed.withValues(alpha: 0.4),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),
@@ -298,61 +300,53 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
           : null,
 
       // Enhanced Bottom Navigation
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: ColorConst.neutralGray.withOpacity(0.2),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(UIConst.radiusL),
-            topRight: Radius.circular(UIConst.radiusL),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: ColorConst.neutralGray.withValues(alpha: 0.2),
+                blurRadius: 20,
+                offset: const Offset(0, -5),
+              ),
+            ],
           ),
-          child: NavigationBar(
-            selectedIndex: currentPageIndex,
-            onDestinationSelected: _onDestinationSelected,
-            backgroundColor: ColorConst.cardBackground,
-            elevation: 0,
-            height: 80,
-            animationDuration: const Duration(milliseconds: 300),
-            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-            destinations: navigationItems.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final isSelected = index == currentPageIndex;
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(UIConst.radiusL),
+              topRight: Radius.circular(UIConst.radiusL),
+            ),
+            child: NavigationBar(
+              selectedIndex: currentPageIndex,
+              onDestinationSelected: _onDestinationSelected,
+              backgroundColor: ColorConst.surfaceLight,
+              height: 70, // Reduced height for better proportions
+              animationDuration: const Duration(milliseconds: 300),
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+              destinations: navigationItems.asMap().entries.map((entry) {
+                final index = entry.key;
+                final item = entry.value;
+                final isSelected = index == currentPageIndex;
 
-              return NavigationDestination(
-                icon: Container(
-                  padding: const EdgeInsets.all(UIConst.spacingS),
-                  decoration: BoxDecoration(
-                    color:
-                        isSelected ? ColorConst.primaryGreen.withOpacity(0.1) : Colors.transparent,
-                    borderRadius: BorderRadius.circular(UIConst.radiusM),
+                return NavigationDestination(
+                  icon: Container(
+                    padding: const EdgeInsets.all(UIConst.spacingS),
+                    child: Icon(
+                      isSelected ? item.selectedIcon : item.icon,
+                      color: isSelected ? ColorConst.primaryGreen : ColorConst.textSecondary,
+                    ),
                   ),
-                  child: Icon(
-                    isSelected ? item.selectedIcon : item.icon,
-                    color: isSelected ? ColorConst.primaryGreen : ColorConst.textSecondary,
+                  selectedIcon: Container(
+                    padding: const EdgeInsets.all(UIConst.spacingS),
+                    child: Icon(
+                      item.selectedIcon,
+                      color: ColorConst.primaryGreen,
+                    ),
                   ),
-                ),
-                selectedIcon: Container(
-                  padding: const EdgeInsets.all(UIConst.spacingS),
-                  decoration: BoxDecoration(
-                    color: ColorConst.primaryGreen.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(UIConst.radiusM),
-                  ),
-                  child: Icon(
-                    item.selectedIcon,
-                    color: ColorConst.primaryGreen,
-                  ),
-                ),
-                label: item.label,
-              );
-            }).toList(),
+                  label: item.label,
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),
@@ -377,7 +371,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
             borderRadius: BorderRadius.circular(UIConst.radiusL),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -401,7 +395,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
             borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.3),
+                color: color.withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),

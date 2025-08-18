@@ -23,7 +23,6 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
-  late Animation<double> _slideAnimation;
 
   @override
   void initState() {
@@ -35,13 +34,6 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: 0.95,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-    _slideAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
@@ -73,11 +65,11 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
             ),
             child: Card(
               elevation: UIConst.elevationLow,
-              shadowColor: transactionColor.withOpacity(0.1),
+              shadowColor: transactionColor.withValues(alpha: 0.1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(UIConst.radiusL),
                 side: BorderSide(
-                  color: transactionColor.withOpacity(0.1),
+                  color: transactionColor.withValues(alpha: 0.1),
                   width: 1,
                 ),
               ),
@@ -95,7 +87,7 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
                         decoration: BoxDecoration(
                           color: categoryColor.computeLuminance() > 0.5
                               ? categoryColor
-                              : categoryColor.withOpacity(0.8),
+                              : categoryColor.withValues(alpha: 0.8),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(UIConst.radiusL),
                             bottomLeft: Radius.circular(UIConst.radiusL),
@@ -112,7 +104,7 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            transactionColor.withOpacity(0.03),
+                            transactionColor.withValues(alpha: 0.03),
                             Colors.transparent,
                           ],
                         ),
@@ -126,10 +118,10 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
                           width: 56,
                           height: 56,
                           decoration: BoxDecoration(
-                            color: transactionColor.withOpacity(0.1),
+                            color: transactionColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(UIConst.radiusM),
                             border: Border.all(
-                              color: transactionColor.withOpacity(0.2),
+                              color: transactionColor.withValues(alpha: 0.2),
                               width: 1,
                             ),
                           ),
@@ -192,7 +184,7 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
                                     vertical: UIConst.spacingXS,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: ColorConst.neutralGray.withOpacity(0.1),
+                                    color: ColorConst.neutralGray.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(UIConst.radiusS),
                                   ),
                                   child: Text(
@@ -264,12 +256,6 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
                         trailing: widget.isShowingOption
                             ? _buildActionButtons(context, theme, transactionColor)
                             : const SizedBox.shrink(),
-                        onTap: () {
-                          HapticFeedback.lightImpact();
-                          _animationController.forward().then((_) {
-                            _animationController.reverse();
-                          });
-                        },
                       ),
                     ),
                   ],
@@ -293,7 +279,7 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
           // Edit button
           Container(
             decoration: BoxDecoration(
-              color: ColorConst.accentBlue.withOpacity(0.1),
+              color: ColorConst.accentBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(UIConst.radiusS),
             ),
             child: IconButton(
@@ -316,7 +302,7 @@ class _TransactionListTileState extends ConsumerState<TransactionListTile>
           // Delete button
           Container(
             decoration: BoxDecoration(
-              color: ColorConst.expenseRed.withOpacity(0.1),
+              color: ColorConst.expenseRed.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(UIConst.radiusS),
             ),
             child: IconButton(

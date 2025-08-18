@@ -1,3 +1,4 @@
+import 'package:fl_finance_mngt/core/constants.dart';
 import 'package:fl_finance_mngt/database/app_config.dart';
 import 'package:fl_finance_mngt/database/app_config_provider.dart';
 import 'package:fl_finance_mngt/service/dialog_services.dart';
@@ -14,7 +15,9 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AppConfig appConfig = ref.watch(appConfigProvider);
 
-    return SettingsList(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: UIConst.spacingXL), // Bottom padding for navigation
+      child: SettingsList(
         lightTheme:
             SettingsThemeData(settingsListBackground: Theme.of(context).colorScheme.surface),
         sections: [
@@ -70,6 +73,8 @@ class SettingsPage extends ConsumerWidget {
               ),
             ],
           ),
-        ]);
+        ],
+      ),
+    );
   }
 }

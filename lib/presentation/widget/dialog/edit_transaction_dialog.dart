@@ -10,10 +10,14 @@ import 'package:fl_finance_mngt/notifier/transaction/transaction_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final localCachedTransactionCategoryIdProvider =
-    StateProvider<String>((ref) => ref.read(transactionCategoryProvider).value![0].id!);
-final localCachedAccountIdProvider =
-    StateProvider<String>((ref) => ref.read(accountProvider).value![0].id!);
+final localCachedTransactionCategoryIdProvider = StateProvider<String>((ref) {
+  final categories = ref.read(transactionCategoryProvider).value;
+  return (categories != null && categories.isNotEmpty) ? categories[0].id! : '';
+});
+final localCachedAccountIdProvider = StateProvider<String>((ref) {
+  final accounts = ref.read(accountProvider).value;
+  return (accounts != null && accounts.isNotEmpty) ? accounts[0].id! : '';
+});
 final localAmountFormattedPreviewProvider = StateProvider<String>((ref) => '0');
 
 class EditTransactionDialog extends ConsumerStatefulWidget {
@@ -74,7 +78,8 @@ class EditTransactionDialogState extends ConsumerState<EditTransactionDialog> {
                 // Amount Preview
                 Center(
                   child: Text(
-                    currencyFormat(amountTextController.text == '' ? '0' : amountTextController.text, type),
+                    currencyFormat(
+                        amountTextController.text == '' ? '0' : amountTextController.text, type),
                     style: TextStyle(
                         color: type == TransactionConst.income ? Colors.green : Colors.red),
                   ),
@@ -153,8 +158,7 @@ class EditTransactionDialogState extends ConsumerState<EditTransactionDialog> {
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                       constraints: BoxConstraints.tight(const Size.fromHeight(55)),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(4))),
-                  onSelected: (String? value) =>
-                      setState(() => transactionCategoryId = value!),
+                  onSelected: (String? value) => setState(() => transactionCategoryId = value!),
                   dropdownMenuEntries: List.generate(transactionCategories.length, (index) {
                     TranscactionCategory transactionCategory = transactionCategories[index];
                     return DropdownMenuEntry(
@@ -201,8 +205,7 @@ class EditTransactionDialogState extends ConsumerState<EditTransactionDialog> {
                           },
                     child: Text('EDIT',
                         style: TextStyle(
-                            fontSize:
-                                Theme.of(context).appBarTheme.titleTextStyle!.fontSize! - 2)),
+                            fontSize: Theme.of(context).appBarTheme.titleTextStyle!.fontSize! - 2)),
                   ),
                 ),
               ],
