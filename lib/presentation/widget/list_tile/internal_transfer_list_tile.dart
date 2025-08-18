@@ -169,12 +169,15 @@ class _InternalTransferListTileState extends ConsumerState<InternalTransferListT
                                 color: ColorConst.accentBlue,
                               ),
                               const SizedBox(width: UIConst.spacingXS),
-                              Text(
-                                'INTERNAL TRANSFER',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: ColorConst.accentBlue,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 11,
+                              Expanded(
+                                child: Text(
+                                  'INTERNAL TRANSFER',
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: ColorConst.accentBlue,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 11,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -210,12 +213,15 @@ class _InternalTransferListTileState extends ConsumerState<InternalTransferListT
                               color: ColorConst.textSecondary,
                             ),
                             const SizedBox(width: UIConst.spacingXS),
-                            Text(
-                              idTruncated,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: ColorConst.textSecondary,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
+                            Expanded(
+                              child: Text(
+                                idTruncated,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: ColorConst.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
