@@ -53,27 +53,17 @@ class HomePage extends ConsumerWidget {
             UIConst.spacingM,
             UIConst.spacingM,
             UIConst.spacingM,
-            UIConst.spacingXL, // Extra bottom padding for navigation bar
+            UIConst.spacingXL,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Welcome Section with Total Balance
               _buildWelcomeSection(totalAccountBalance, theme),
-
               const SizedBox(height: UIConst.spacingL),
-
-              // Accounts Overview Card
               _buildAccountsCard(accounts, accountsBalance, accountListScrollController, theme),
-
               const SizedBox(height: UIConst.spacingL),
-
-              // Transactions Section Header
               _buildTransactionsHeader(transactions, transactionTilesIsShowingOption, ref, theme),
-
               const SizedBox(height: UIConst.spacingM),
-
-              // Transaction List
               _buildTransactionsList(transactions, internalTransfers,
                   transactionTilesIsShowingOption, transactionListScrollController, ref, theme),
             ],

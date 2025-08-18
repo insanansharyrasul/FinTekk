@@ -21,47 +21,10 @@ class ReportPage extends ConsumerStatefulWidget {
 class ReportPageState extends ConsumerState<ReportPage> with TickerProviderStateMixin {
   final selectMonthScrollController = ScrollController();
   final bodyScrollController = ScrollController();
-  // late AnimationController _fadeAnimationController;
-  // late AnimationController _slideAnimationController;
-  // late Animation<double> _fadeAnimation;
-  // late Animation<Offset> _slideAnimation;
 
-  @override
-  void initState() {
-    super.initState();
-    // _fadeAnimationController = AnimationController(
-    //   duration: const Duration(milliseconds: 800),
-    //   vsync: this,
-    // );
-    // _slideAnimationController = AnimationController(
-    //   duration: const Duration(milliseconds: 600),
-    //   vsync: this,
-    // );
-
-    // _fadeAnimation = Tween<double>(
-    //   begin: 0.0,
-    //   end: 1.0,
-    // ).animate(CurvedAnimation(
-    //   parent: _fadeAnimationController,
-    //   curve: Curves.easeInOut,
-    // ));
-
-    // _slideAnimation = Tween<Offset>(
-    //   begin: const Offset(0, 0.1),
-    //   end: Offset.zero,
-    // ).animate(CurvedAnimation(
-    //   parent: _slideAnimationController,
-    //   curve: Curves.easeOutQuart,
-    // ));
-
-    // _fadeAnimationController.forward();
-    // _slideAnimationController.forward();
-  }
 
   @override
   void dispose() {
-    // _fadeAnimationController.dispose();
-    // _slideAnimationController.dispose();
     selectMonthScrollController.dispose();
     bodyScrollController.dispose();
     super.dispose();
@@ -93,15 +56,10 @@ class ReportPageState extends ConsumerState<ReportPage> with TickerProviderState
                 ],
               ),
             ),
-            child: Column(
+            child: ListView(
               children: [
-                // Modern header with gradient
-                // _buildHeader(),
-                // Enhanced month selector
                 _buildMonthSelector(reportMonths, reportSelectedMonth),
-                // Improved transaction type selector
                 _buildTransactionTypeSelector(reportSelectedTransactionType),
-                // Enhanced body content
                 Expanded(
                   child: _buildBodyContent(
                     categoryBalanceMap,
@@ -405,13 +363,10 @@ class ReportPageState extends ConsumerState<ReportPage> with TickerProviderState
         ),
         child: Column(
           children: [
-            // Enhanced pie chart section
             _buildPieChartCard(categoryBalanceMap, transactionCategories),
             const SizedBox(height: UIConst.spacingL),
-            // Enhanced summary report card
             _buildSummaryCard(reportByMonth),
             const SizedBox(height: UIConst.spacingL),
-            // Enhanced category details card
             _buildCategoryDetailsCard(
               categoryBalanceMap,
               reportSelectedTransactionType,

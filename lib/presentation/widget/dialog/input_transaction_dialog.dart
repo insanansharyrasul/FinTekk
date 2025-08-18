@@ -120,9 +120,7 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
             automaticallyImplyLeading: false,
             leading: IconButton(
               onPressed: () {
-                // _animationController.reverse().then((_) {
                 Navigator.of(context).pop();
-                // });
               },
               icon: const Icon(Icons.close_rounded, size: 28),
               style: IconButton.styleFrom(
@@ -553,9 +551,7 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
           flex: 2,
           child: OutlinedButton.icon(
             onPressed: () {
-              // _animationController.reverse().then((_) {
               Navigator.of(context).pop();
-              // });
             },
             icon: const Icon(Icons.close_rounded),
             label: const Text('Cancel'),
@@ -590,9 +586,7 @@ class InputTransactionDialogState extends ConsumerState<InputTransactionDialog>
                         message:
                             '${type == TransactionConst.income ? "Income" : "Expense"} added successfully!',
                       );
-                      // _animationController.reverse().then((_) {
                       Navigator.pop(context);
-                      // });
                     }
                   }
                 : null,

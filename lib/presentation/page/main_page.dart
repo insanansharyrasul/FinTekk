@@ -69,7 +69,6 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
       curve: Curves.elasticOut,
     ));
 
-    // Start animations
     _fabAnimationController.forward();
     _pageAnimationController.forward();
   }
@@ -104,7 +103,6 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
       backgroundColor: ColorConst.surfaceLight,
       extendBody: true,
 
-      // Enhanced AppBar with gradient
       appBar: AppBar(
         title: Row(
           children: [
@@ -161,9 +159,8 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
         ),
       ),
 
-      // Enhanced Body with PageView
       body: Padding(
-        padding: const EdgeInsets.only(bottom: 70), // Add bottom padding for navigation bar
+        padding: const EdgeInsets.only(bottom: 70), 
         child: PageView(
           controller: _pageController,
           onPageChanged: (index) {
@@ -175,7 +172,6 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
         ),
       ),
 
-      // Enhanced FAB
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: currentPageIndex == 0
           ? AnimatedBuilder(
@@ -299,7 +295,6 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
             )
           : null,
 
-      // Enhanced Bottom Navigation
       bottomNavigationBar: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -320,7 +315,7 @@ class MainPageState extends ConsumerState<MainPage> with TickerProviderStateMixi
               selectedIndex: currentPageIndex,
               onDestinationSelected: _onDestinationSelected,
               backgroundColor: ColorConst.surfaceLight,
-              height: 70, // Reduced height for better proportions
+              height: 70, 
               animationDuration: const Duration(milliseconds: 300),
               labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
               destinations: navigationItems.asMap().entries.map((entry) {

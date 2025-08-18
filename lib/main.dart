@@ -49,7 +49,6 @@ class App extends ConsumerWidget {
         ),
         useMaterial3: true,
 
-        // Enhanced AppBar theme
         appBarTheme: AppBarTheme(
           titleTextStyle: const TextStyle(
             fontSize: 22,
@@ -65,7 +64,6 @@ class App extends ConsumerWidget {
           centerTitle: true,
         ),
 
-        // Enhanced Card theme
         cardTheme: CardThemeData(
           elevation: UIConst.elevationLow,
           shadowColor: ColorConst.neutralGray.withValues(alpha: 0.3),
@@ -79,7 +77,6 @@ class App extends ConsumerWidget {
           ),
         ),
 
-        // Enhanced ListTile theme
         listTileTheme: const ListTileThemeData(
           contentPadding: EdgeInsets.symmetric(
             horizontal: UIConst.spacingM,
@@ -88,7 +85,6 @@ class App extends ConsumerWidget {
           visualDensity: VisualDensity.comfortable,
         ),
 
-        // Enhanced Typography
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             fontSize: 32,
@@ -168,7 +164,6 @@ class App extends ConsumerWidget {
           ),
         ),
 
-        // Enhanced FloatingActionButton theme
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: ColorConst.primaryGreen,
           foregroundColor: ColorConst.textOnPrimary,
@@ -178,7 +173,6 @@ class App extends ConsumerWidget {
           ),
         ),
 
-        // Enhanced Navigation theme
         navigationBarTheme: NavigationBarThemeData(
           backgroundColor: ColorConst.cardBackground,
           elevation: UIConst.elevationMedium,
@@ -212,7 +206,6 @@ class App extends ConsumerWidget {
           }),
         ),
 
-        // Enhanced Input decoration theme
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: ColorConst.surfaceLight,
@@ -240,7 +233,6 @@ class App extends ConsumerWidget {
           hintStyle: const TextStyle(color: ColorConst.textSecondary),
         ),
 
-        // Enhanced Button themes
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: ColorConst.primaryGreen,

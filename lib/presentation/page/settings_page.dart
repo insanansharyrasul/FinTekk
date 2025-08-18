@@ -430,7 +430,6 @@ class SettingsPage extends ConsumerWidget {
         );
       }
     } catch (e) {
-      // Close loading dialog if still open
       if (context.mounted && Navigator.of(context).canPop()) {
         Navigator.of(context).pop();
       }
